@@ -56,6 +56,7 @@ The adjustments you need to make to the script are listed below:
 ```{bash}
 $LANE="<LANE ID>" # Replace <LANE ID> with Use this if you have run samples across multple lanes and are processing lanes separately. Otherwise, insert a placeholder (like $LANE="lane")
 $OUTDIR="<DIR>" # Replace <DIR> with the path of your "bam" folder
+$REFDIR="<DIR>" # Replace <DIR> with the path to your reference index (ex. $REFDIR="../Reference")
 ```
 Make sure all of your files end in ".fastq.gz". If not, you'll need to change the script (where you see `-U $sample.fastq.gz`) to reflect your real file names.
 
@@ -71,4 +72,11 @@ After you run this, you can see the status of your job by checking the queue:
 ```
 When it is done running, navigate to your "bam" folder. There should be one file in there.
 
-Once we know it is working, we want to map all of your fastq files at once.
+Once we know it is working, we want to map all of your fastq files at once. Navigate into your "fastq" folder and create a loop that submits all the jobs:
+
+```{bash}
+> for sample in `ls *.fastq.gz | cut -f1 -d'.'`; do sbatch ../scripts/map.sbatch $sample; done
+```
+The first part of this command `ls *.fastq.gz` just asks for a list of all files that end in fastq.gz. The second part of the command `cut -f1 -d'.'` cuts the file name at each "." and takes just the first part of the filename. You can change this if you want something different. We then loop through these samples and execute the **map.sbatch** script for each sample.
+
+
