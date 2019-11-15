@@ -1,5 +1,5 @@
 # RNASeq-Pipeline
-This repository contains scripts and hints for processing RNASeq data for gene expression analysis
+This repository contains scripts and hints for processing RNASeq data for gene expression analysis. This is not meant to be a complete guide to RNA-Seq (if you're looking for that, check out [this page](https://rnaseq.uoregon.edu/) which has a ton of great informtion).
 
 ## Working on XSEDE Bridges
 
@@ -27,7 +27,20 @@ I suggest you put all of your fastq files in one folder inside your project dire
 
 &nbsp;
 
-## Index the transcriptome assembly
+## Estimating gene expression per contig
+
+There are many different pipelines for estimating gene expression. I provide scripts for two:
+1) Alignment-free estimation using the program salmon
+2) Alignments using hisat2
+
+### Alignment-free estimation using salmon
+
+The program 
+
+
+
+
+### Alignments using hisat2
 
 We will use a program called `hisat2` ([manual here](https://ccb.jhu.edu/software/hisat2/manual.shtml)) to map the reads to the reference assembly, but first we need to build an index for that assembly. Luckily, `hisat2` is pre-installed on Bridges. To use it, you first need to load the module:
 
