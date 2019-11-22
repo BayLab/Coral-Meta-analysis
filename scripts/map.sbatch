@@ -3,13 +3,13 @@
 #all commands that start with SBATCH contain commands that are just used by SLURM for scheduling
 #################
 #set a job name
-#SBATCH --job-name=MAP
+#SBATCH --job-name=SRA
 #################
 #a file for job output, you can check job progress for each sample
-#SBATCH --output=MAP.%j.out
+#SBATCH --output=SRA.%j.out
 #################
 # a file for errors from the job for each sample
-#SBATCH --error=MAP.%j.err
+#SBATCH --error=SRA.%j.err
 #################
 #time you think you need; default is one hour
 #in minutes in this case
@@ -37,22 +37,14 @@ set -x
 ##################
 
 ##Load programs you need
-module load hisat2
-module load samtools
+module load sra-toolkit
 
-##Study specific info
-$LANE="<LANE ID"
-$LANE="<LANE ID>" # Replace <LANE ID> with Use this if you have run samples across multple lanes and are processing lanes separately. Otherwise, insert a placeholder (like $LANE="lane")
-$OUTDIR="<DIR>" # Replace <DIR> with the path of your "bam" folder
-$REFDIR="<DIR>" # Replace <DIR> with the path to your reference index (ex. $REFDIR="../Reference")
+##Bioproject ID here
+PROJID="PRJNA177515"
 
+##Make a file with all the sample IDS
+wget 'http://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?save=efetch&rettype=runinfo&db=sra&term=$PROJID' 
+	-O - | cut -f1 -d',' | sed 1d > SRR_numbers.txt
 
-##Mapping
-sample=$1
-ID="$LANE.$sample"
-
-hisat2 -x $REFDIR \
-	--threads 8 -U $sample.fastq.gz \
-	--rg-id $ID --rg SM:$sample --rg LB:$LANE --rg PU:$LANE --rg PL:illumina | \
-	samtools view -bhS - | \
-	samtools sort -o $OUTDIR/$ID.bam
+##Download the samples
+fastq-dump --split-files $(<SRR_numbers.txt)
