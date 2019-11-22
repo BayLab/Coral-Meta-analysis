@@ -67,5 +67,11 @@ I suggest you put all of your fastq files in one folder inside your project dire
 ## Estimating gene expression per contig
 Now we can use the assembly and the fastq files to estimate gene expression levels. For this project, I think we will use the program [salmon](https://salmon.readthedocs.io/en/latest/salmon.html#using-salmon) because it is very fast and seems to perform well. The link above has a great tutorial. See if you can use salmon to quantify gene expression for one of your samples (use the method for mapping based quantification). If you can do that, you can quantify all of your samples in a batch.
 
-## Script
+## Scripts
+In general, you shouldn't be running much straight from the command line. To add a job to the cluster queue you will need an sbatch script. 
+The download.sbatch script can be use for downloading data. You will just need to change the project ID. You can submit jobs like this:
+
+```{bash}
+> sbatch download.sbatch
+```
 
